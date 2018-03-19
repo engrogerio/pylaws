@@ -1,0 +1,4 @@
+django==1.11.11
+lxml==4.2.0
+tika==1.16
+django-admin-bootstrapped==2.5.7
