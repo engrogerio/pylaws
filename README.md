@@ -1,5 +1,5 @@
 # pylaws
-A Repository for all Brazilian cities laws to make it easy for everybody 
+A Repository for all Brazilian cities laws to make it easy for everybody consults and help the city council.
 
 ## Getting Started
 
@@ -24,16 +24,18 @@ Create an virtual environment:
 ```
 virtualenv <directory>/pylaws
 ```
+
 Start your virtual environment:
 
 Windows:
 ```
 c:/<directory/pylaw/bin/activate>
-Linux:
-
 ```
-source ~/<dir/pylaw>/bin/activate
-``````
+
+Linux:
+```
+source <dir/pylaw>/bin/activate
+```
 
 And install the requirements:
 
