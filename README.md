@@ -44,11 +44,22 @@ pip install -r requirements.txt
 ```
 
 
-
 ## Running the tests
 
 There is no tests written so far.
 
+
+## Running the app on dev environment
+
+Windows:
+```
+python manage.py runserver
+```
+
+Linux:
+```
+./manage.py runserver
+```
 
 ## Deployment
 
@@ -56,13 +67,13 @@ Will be made on a near future...
 
 ## Built With
 
-* [Django] (https://www.djangoproject.com/) - Best Web Framework ever...
-* [Apache Tika](https://tika.apache.org/) - PDF to Text tool.
+* [Django] (https://www.djangoproject.com/) - Best Web Framework ever.
+* [Apache Tika] (https://tika.apache.org/) - PDF to Text tool.
 
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](contibuting.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](contributing.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
@@ -75,7 +86,7 @@ Not yet...
 
 ## License
 
-This project is licensed under the GNU Public License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GNU Public License - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## Acknowledgments
 
