@@ -31,11 +31,13 @@ class Law(models.Model):
     is_active = models.IntegerField( blank='true', null='true')
     law_type = models.CharField(max_length=50, blank='true', null='true') #IntegerField(choices = TYPES, default = ORDINARIA)
     created_by = models.CharField(max_length=30, blank='true', null='true')
-    text = models.CharField(max_length=60000, blank='true', null='true')
+    raw = models.CharField(max_length=60000, blank='true', null='true')
+    law_text = models.TextField(blank='true', null='true')
     law_url = models.URLField(blank='true', null='true')
     
-    def __unicode__(self):
-        return ''.join(self.number)
+    def __str__(self):
+        return self.number + ' - ' + self.law_type
     
+
     class Meta:
         unique_together = ('city', 'number',)

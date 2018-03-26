@@ -2,3 +2,6 @@ django==1.11.11
 lxml==4.2.0
 tika==1.16
 django-admin-bootstrapped==2.5.7
+pillow==5.0.0
+pytesseract==0.2.0
+tessaract-por

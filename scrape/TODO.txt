@@ -1,0 +1,8 @@
+_When there is two laws with same number and city, save as version 2 ?
+_Create a State field for laws
+_Create a Delete all laws by city
+_Create a Update all Laws, comparing the text if there is a diference, save with a diferent version 
+and date;
+_Create a log screen to show laws being downloaded
+_To put a lock on a law record, so one specific law wont be updated
+_To Validate a xpath on the form
