@@ -14,11 +14,11 @@ import io
 def extract_txt_from_jpg(file):
     """ 
     Extract jpg's from pdf's. Quick and dirty.
-    and saves N files on /tmp/jpgN.jpg. Returns a txt.
+    and saves N files on C:/temp/jpgN.jpg. Returns a txt.
 
     """
     pdf = open(file, "rb").read()
-
+    path = 'C:/temp'
     startmark = b"\xff\xd8"
     startfix = 0
     endmark = b"\xff\xd9"
@@ -47,7 +47,7 @@ def extract_txt_from_jpg(file):
         iend += endfix
         print ("JPG %d from %d to %d" % (njpg, istart, iend))
         jpg = pdf[istart:iend]
-        jpgfile = open("/tmp/jpg%d.jpg" % njpg, "wb")
+        jpgfile = open("{0}/jpg{1}.jpg".format(path, njpg), "wb")
         jpgfile.write(jpg)
         jpgfile.close()
 
@@ -57,13 +57,13 @@ def extract_txt_from_jpg(file):
     # get the text from saved jpgs
     result_txt=''
     for jpg in range(njpg):
-        file = io.BytesIO(b'/tmp/jpg%d.jpg' % jpg).read()
+        file = io.BytesIO(b"{0}/jpg{1}.jpg".format(path, jpg)).read()
         im=Image.open(file) 
         txt = pytesseract.image_to_string(im, lang='por', config='', nice=0) #, output_type=Output.STRING)
         result_txt += txt
         # remove used file
         try:
-            os.remove('/tmp/jpg%d.jpg' % jpg)
+            os.remove("{0}/jpg{1}.jpg".format(path, jpg))
         except OSError:
             pass
     return result_txt
@@ -84,19 +84,19 @@ def get_txt_from_pdf(url):
     return dic
             
 def get_txt_from_jpg_from_pdf(url):
-    
+    path = 'C:/temp'
     txt = ''
     try:
         # download the file to temporary directory
         pdf_file = urlopen(url)
-        with open('/tmp/laws_temp.pdf','wb') as output:
+        with open('{0}/laws_temp.pdf'.format(path),'wb') as output:
             output.write(pdf_file.read())
         # extract text from jpg inside pdf    
-        txt = extract_txt_from_jpg('/tmp/laws_temp.pdf')
+        txt = extract_txt_from_jpg('{0}/laws_temp.pdf'.format(path))
     except Exception as e:
         txt = e
     try:
-        os.remove('/tmp/laws_temp.pdf')
+        os.remove('{0}/laws_temp.pdf'.format(path))
     except:
         pass
     return txt

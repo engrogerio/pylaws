@@ -1,0 +1,13 @@
+{
+    "ENV": "TEST",
+  
+    "TEST": {
+      "LOGGING_FILE": "C:\\temp\\log_pylaws.txt"
+      
+    },
+  
+    "PROD": {
+  
+    }
+  
+  }

@@ -34,10 +34,11 @@ class Law(models.Model):
     raw = models.CharField(max_length=60000, blank='true', null='true')
     law_text = models.TextField(blank='true', null='true')
     law_url = models.URLField(blank='true', null='true')
+    scrapped_date = models.DateTimeField(auto_now_add=True, blank=True)
     
     def __str__(self):
         return self.number + ' - ' + self.law_type
     
 
     class Meta:
-        unique_together = ('city', 'number',)
+        unique_together = ('city', 'number','issued_date')
