@@ -16,7 +16,7 @@ Download the project or clone it:
 
 
 ```
-git clone http://github.com/engrogerio/pylaw
+git clone http://github.com/engrogerio/pylaws
 ```
 
 Create an virtual environment:
@@ -29,12 +29,12 @@ Start your virtual environment:
 
 Windows:
 ```
-c:/<directory/pylaw/bin/activate>
+c:/<directory>/pylaws/bin/activate
 ```
 
 Linux:
 ```
-source <dir/pylaw>/bin/activate
+source <dir>/pylaws/bin/activate
 ```
 
 And install the requirements:
