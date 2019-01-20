@@ -25,10 +25,14 @@ class Scrape(models.Model):
 
     env = config['ENV']
     logging_file = config[env]['LOGGING_FILE']
+
     # set basic parameters for logging
-    logging.basicConfig(filename=logging_file, level=logging.DEBUG, 
-	format='%(asctime)s,%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s', datefmt='%Y-%m-%d %H:%M:%S',)
-    
+    logging.basicConfig(level=logging.DEBUG, 
+	format='%(asctime)s,%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s', datefmt='%Y-%m-%d %H:%M:%S',
+    handlers=[
+        logging.FileHandler(logging_file),
+        logging.StreamHandler()
+    ])
     GET = 1
     POST = 2
 
@@ -85,9 +89,9 @@ class Scrape(models.Model):
         """
         Returns a dicionary.
         Uses Apache Tika for PDFs and PyTessaract for images.
-        Currently accepted PDF or JPG files.
+        Currently accepting PDF or JPG files.
         """
-        dic={'content':'', 'error':'URL {0} contains invalid file. Currently accepting only PDF and JPG !'.format(url)}
+        dic={'content':'', 'error':'URL ' + url + ' contains invalid file. Currently accepting only PDF and JPG !'}
         if url[-3:] == 'pdf':
             dic = get_txt_from_pdf(url)
             #if there is no content, extracts text from image from pdf
@@ -111,7 +115,7 @@ class Scrape(models.Model):
         law_author = ''
         law_summary = ''
         law_link = ''
-        htmlElem = html.fromstring(site.content.decode('utf-8'))
+        htmlElem = html.fromstring(site.content) #.decode('unicode'))
 
         # is there an xpath?
         if self.promulgation_date_xpath:    law_date = htmlElem.xpath(self.promulgation_date_xpath)
@@ -131,7 +135,7 @@ class Scrape(models.Model):
         for i in range(len(law_date)):
             try:    
                 issued = datetime.strptime(self.find_between(law_date[i].text ,self.promulgation_date_before_string,self.promulgation_date_after_string).lstrip().rstrip(), "%d/%m/%Y").strftime('%Y-%m-%d')
-                logging.info('Calculated issue date as {}'.format(issued))
+                logging.info('Calculated issue date as %s', issued)
             except IndexError:
                 logging.warning('Issued date not defined.')
                 issued = '1900-01-01'
@@ -143,7 +147,7 @@ class Scrape(models.Model):
                 logging.warning('Issued date with type error :%s', law_date[i].text)
             try: 
                 number = self.find_between(law_number[i].text, self.law_number_before_string, self.law_number_after_string).lstrip().rstrip()
-                logging.info('Calculated number as {}'.format(number))
+                logging.info('Calculated number as %s', number)
             except IndexError:
                 number = 'Não Informado'
                 logging.warning('Law number not informed. Using: "Não Informado"')
@@ -153,27 +157,27 @@ class Scrape(models.Model):
 
             try: 
                 type = law_type[i].text.lstrip().rstrip()
-                logging.info('Calculated law type as {}'.format(type))
+                logging.info('Calculated law type as %s', type)
             except IndexError:
                 type = 'Não Informado'
                 logging.warning('Law type not informed.')
 
             try: 
                 author = law_author[i].text.lstrip().rstrip()
-                logging.info('Calculated law author as {}'.format(author))
+                logging.info('Calculated law author as %s', author)
             except IndexError:
                 author = 'Não Informado'
                 logging.warning('Author name not informed.')
 
             try: 
                 summary = law_summary[i].text.lstrip().rstrip()
-                logging.info('Calculated law summary as {}'.format(summary))
+                logging.info('Calculated law summary as %s', summary)
             except IndexError:
                 summary = 'Não Informado'
                 logging.warning('Law summary not informed.')
             try: 
                 link = links[i]
-                logging.info('Calculated law link as {}'.format(link))
+                logging.info('Calculated law link as %s', link)
             except IndexError:
                 link = None
                 logging.warning('Law link not informed.')
@@ -184,16 +188,16 @@ class Scrape(models.Model):
                 law = Law.objects.create(city=self.city_name, number=number, summary=summary, 
                 created_date=issued, issued_date=issued, is_active = 1, law_type=type, 
                 created_by=author, law_url=link, ) 
-                logging.info('Created the law {} on database'.format(law))
+                logging.info('Created the law %s on database', law)
             except IntegrityError as e:
-                logging.warning('There is already information on database for link {0} law number {1} and date {2}. Cause is {3}.Ignoring.'.format(
-                    link, number, issued, e))
+                logging.warning('There is already information on database for link %s law number %s and date %s. Cause is %s.Ignoring.', 
+                    link, number, issued, e)
                 continue
 
             except Exception as e:
                  #print(number, summary, issued, type, author, raw, link)
-                logging.warning('Oops...Something went wrong with your request for {0}, law {1}.Cause is {2}.Ignoring.'.format(
-                    link, number, e)) #sys.exc_info()[0]))
+                logging.warning('Oops...Something went wrong with your request for %s, law %s.Cause is %s.Ignoring.', 
+                    link, number, e) #sys.exc_info()[0]))
                 continue
             # except:
             #     print(sys.exc_info()[0])
@@ -203,14 +207,14 @@ class Scrape(models.Model):
             # if there is a link to download from and the law was created, extract the text
             if link and law.id:
                 dic = self.get_file_content(link)
-                logging.info('Got the content for law No {}'.format(law.id))
+                logging.info('Got the content for law No %s: %s', law.id, dic)
             raw = dic
             try:
                 law_text = dic['content']
-                logging.info('Law content is {}.'.format(law_text))
-            except:
-                law_text=''
-                logging.warning('Law content could not be extracted.')
+                logging.info('Law content is %s.', law_text)
+            except Exception as e:
+                law_text='Law content could not be extracted'
+                logging.warning('Law content could not be extracted. Error %s.', eval)
             #Now that the Law was created, extracts the text from file and add to the law
             
             Law.objects.filter(pk=law.id).update(raw=dic, law_text=law_text)
@@ -230,7 +234,7 @@ class Scrape(models.Model):
         if self.site_parameter_start and not self.site_parameter_end and self.request_method == self.GET:
             parameters[self.site_parameter_name]=self.site_parameter_start
             site = requests.get(self.site_url, params=parameters)
-            logging.info ('Scrapeando URL: {0}'.format(site.url))
+            logging.info ('Scrapping URL: %s', site.url)
             self.scrape(site)
         else:
             if self.site_parameter_start and self.site_parameter_end and self.request_method == self.GET:

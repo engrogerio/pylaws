@@ -15,7 +15,6 @@ def extract_txt_from_jpg(file):
     """ 
     Extract jpg's from pdf's. Quick and dirty.
     and saves N files on C:/temp/jpgN.jpg. Returns a txt.
-
     """
     pdf = open(file, "rb").read()
     path = 'C:/temp'
@@ -69,10 +68,10 @@ def extract_txt_from_jpg(file):
     return result_txt
 
 def get_txt_from_pdf(url):
-    tika.TikaClientOnly = True
+    tika.TIKA_CLIENT_ONLY = True
     try: 
         # tika just parse from url !!!
-        dic = parser.from_file(url)
+        dic = parser.from_file(url, 'http://localhost:9999/tika')
         # tika returns the content on the key 'content'
         
     except Exception as e:

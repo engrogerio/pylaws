@@ -20,7 +20,7 @@ class ScrapeMixin:
             message_bit = "%s sites were" % rows_updated
         self.message_user(request, "%s scraped." % message_bit)
 
-        return response
+        #return response
 
     scrape.short_description = "Download the laws"
     
