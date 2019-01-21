@@ -2,7 +2,7 @@
     "ENV": "TEST",
   
     "TEST": {
-      "LOGGING_FILE": "C:\\temp\\log_pylaws.txt"
+      "LOGGING_FILE": "~/log_pylaws.txt"
       
     },
   

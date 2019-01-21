@@ -5,9 +5,10 @@ import sys
 import os
 import pytesseract
 from PIL import Image
-from urllib.parse import urlparse
+from urlparse import urlparse
 import urllib
-from urllib.request import urlopen
+from urllib2 import urlopen
+# from urllib.request import urlopen
 import io
 
 
