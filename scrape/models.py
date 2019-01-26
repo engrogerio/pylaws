@@ -17,9 +17,10 @@ import logging
 
 class Scrape(models.Model):
 
-    path = os.path.dirname(sys.argv[0])
+    path = os.path.dirname(r'/home/ubuntu/invent/pylaws/')
     # grab configuration variables
     # https://hackernoon.com/4-ways-to-manage-the-configuration-in-python-4623049e841b
+    print(path)
     with open(path+'/config.json', 'r') as f:
         config = json.load(f)
 

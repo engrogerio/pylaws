@@ -1,0 +1,11 @@
+# Copy the files to the location:
+/etc/systemd/system/gunicorn.service
+/etc/nginx/nginx.config
+/etc/nginx/sites-available/pylaw
+
+# Create the link:
+ln -s /etc/nginx/sites-available/pylaws /etc/nginx/sites-enabled
+
+# Start the services:
+sudo systemctl start gunicorn
+sudo systemctl start nginx

@@ -1,0 +1,12 @@
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=ubuntu
+Group=adm
+WorkingDirectory=/home/ubuntu/invent/pylaws
+ExecStart=/home/ubuntu/.venvs/pylaws/bin/gunicorn --access-logfile - --workers 3 --bind unix:/home/ubuntu/invent/pylaws/pylaws.sock pylaws.wsgi:application -b 0.0.0.0:8000
+
+[Install]
+WantedBy=multi-user.target

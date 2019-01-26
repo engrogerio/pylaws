@@ -1,0 +1,20 @@
+server {
+    listen 80;
+    server_name 34.214.169.182;
+    root /home/ubuntu/invent/pylaws;
+
+    access_log /home/ubuntu/invent/access.log;
+    error_log /home/ubuntu/invent/error.log;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+
+    location /static/ {
+        root /home/ubuntu/invent/pylaws;
+    }
+
+    location / {
+        include proxy_params;
+	proxy_pass http://localhost:8000;
+	proxy_redirect default;
+    }
+}
