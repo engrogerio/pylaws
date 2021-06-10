@@ -1,6 +1,6 @@
 certifi==2018.11.29
 chardet==3.0.4
-Django==1.9
+Django==2.2.24
 django-admin-bootstrapped==2.5.7
 gunicorn==19.9.0
 idna==2.8
